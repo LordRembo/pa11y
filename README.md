@@ -3,7 +3,7 @@
 **This is a fork of Pa11y, which makes a few changes, not limited to:**
 
 - replace html_codesniffer by BOSA's fork
-- adds a new script that feeds a list of urls & exports a report per url: `npm run-script check -- --urls imports/urls.txt --project dropsolid
+- adds a new script that feeds a list of urls & exports a report per url: `npm run-script check -- --urls imports/urls.txt --project dropsolid`
   - `--urls` is the relative path to a file with an url on each new line
   - `-- project` a name to give to the folder that will contain the reports
   - exported files live in the `exports` folder
