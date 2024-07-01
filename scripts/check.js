@@ -1,8 +1,8 @@
 // An example of running Pa11y on multiple URLS
 'use strict';
 
-const pa11y = require('pa11y');
-const htmlReporter = require('pa11y/lib/reporters/html');
+const pa11y = require('../');
+const htmlReporter = require('../lib/reporters/html');
 const fs = require('fs');
 const path = require('path');
 const {promisify} = require('util');
