@@ -36,7 +36,7 @@
     "bfj": "~8.0.0",
     "commander": "~12.0.0",
     "envinfo": "~7.11.1",
-    "html_codesniffer": "~2.5.1",
+    "html_codesniffer": "github:openfed/AccessibilityCheck",
     "kleur": "~4.1.5",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
@@ -49,9 +49,15 @@
     "eslint-plugin-mocha": "^10.4.1",
     "mocha": "^10.3.0",
     "mockery": "^2.1.0",
+    "pa11y": "^8.0.0",
     "pa11y-lint-config": "^3.0.0",
     "proclaim": "^3.6.0",
     "sinon": "^17.0.1"
+  },
+  "overrides": {
+    "pa11y": {
+      "html_codesniffer": "github:openfed/AccessibilityCheck"
+    }
   },
   "main": "./lib/pa11y.js",
   "bin": {
@@ -63,7 +69,9 @@
     "test-coverage": "c8 -- npm run test-unit",
     "test-integration": "mocha --config test/integration/.mocharc.json",
     "test-unit": "mocha",
-    "verify-coverage": "c8 check-coverage --lines 90 --functions 90 --branches 90"
+    "verify-coverage": "c8 check-coverage --lines 90 --functions 90 --branches 90",
+    "start": "pa11y https://dropsolid.com/en > ../../Downloads/pa11y-report-dropsolid.html --reporter html --runner axe --runner htmlcs",
+    "check": "node scripts/check.js"
   },
   "files": [
     "bin",
