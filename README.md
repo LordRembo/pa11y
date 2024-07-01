@@ -3,10 +3,14 @@
 **This is a fork of Pa11y, which makes a few changes, not limited to:**
 
 - replace html_codesniffer by BOSA's fork
-- adds a new script that feeds a list of urls & exports a report per url: `npm run-script check -- --urls imports/urls.txt --project my_project_folder`
-  - `--urls` is the relative path to a file with an url on each new line
-  - `-- project` a name to give to the folder that will contain the reports
-  - exported files live in the `exports` folder
+- add some new scripts to generate html reports:
+  - `npm run-script check -- --urls imports/urls.txt --project my_project`
+    - feed a list of urls & get an html report per url
+    - `--urls` is the relative path to a file with an url on each new line
+    - `-- project` a name to give to the folder that will contain the reports
+    - exported files live in the `exports` folder
+  - `npm run-script bundle -- --urls imports/urls.txt --project my_project`
+    - feed a list of urls & get 1 html report containing all the pages 
 
 ---
 
