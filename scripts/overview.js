@@ -139,6 +139,7 @@ async function runExample() {
 		// - and then by criterium
 		// - and then by url (needs its code preview and stuff)
 
+		/*
 		for (let page of results) {
 		
 			for (let issue of page.issues) {
@@ -274,8 +275,75 @@ async function runExample() {
 
 			}
 		}
+		*/
+		
+		let typeIssues = {
+			'error': {
+				"label": 'Errors',
+				"type": 'errors',
+				'issues': [],
+				'criteria': []
+			},
+			'warning': {
+				"label": 'Warnings',
+				"type": 'warnings',
+				'issues': [],
+				'criteria': []
+			},
+			'notice': {
+				"label": 'Notices',
+				"type": 'notices',
+				'issues': [],
+				'criteria': []
+			}
+		};
 
-		// console.log(project.issues.errors);
+		let totalIssues = [];
+
+		// merge all page issues into 1 array
+		for (let page of results) {
+			totalIssues = totalIssues.concat(page.issues);
+		}
+
+		// loop per type: errors, warnings, notices
+		for (let key in typeIssues) {
+			(typeIssues[key]).issues = totalIssues.filter( (issue) => (issue.type === key) );
+			project[key + 'Count'] = typeIssues[key].issues.length;
+			console.log(key + ' count = ' + project[key + 'Count']);
+						
+			// add issues as criteria, to typeIssue criteria array,
+			// if it's code does not match the code of an already added criterium
+			(typeIssues[key]).criteria = (typeIssues[key]).issues.reduce((res, itm) => {
+				
+				const typeLabel = upperCaseFirst(itm.type);
+				const critLabel = readableLabel(itm.code);
+				
+				// Test if the item is already in the new array
+				let result = res.find(item => item.code === itm.code)
+				// If not lets add it
+				if(!result) {
+					const crit = {
+						// 'pageUrl': page.pageUrl,
+						// 'documentTitle': page.documentTitle,
+						'code': itm.code,
+						'type': itm.type,
+						'label': critLabel,
+						'typeLabel': typeLabel,
+						// 'message': issue.message,
+						'pageCount': 0,
+						'resultCount': 0,
+						'pages': []
+					};
+					return res.concat(crit);
+				}
+				// If it is just return what we already have
+				return res
+			}, []);
+
+			console.log((typeIssues[key]).criteria.length);
+		}
+
+		project.issues = typeIssues;
 
 		const html = await htmlReporter.results(project);
 		await writeFile(path.resolve('./exports/' + projectName + '-overview.html'), html, err => {
