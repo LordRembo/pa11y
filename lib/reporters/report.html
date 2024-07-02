@@ -37,7 +37,17 @@
 		h3 {
 			font-size: 16px;
 		}
-		summary h2 {
+		details {
+			background: #efefef;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+		summary {
+			padding: 5px 10px;
+		}
+		summary h2,
+		summary h3 {
 			display: inline-block;
 		}
 		pre {
@@ -52,9 +62,14 @@
 		}
 
 		.page {
-			max-width: 800px;
+			max-width: 1200px;
 			margin: 0 auto;
 			padding: 25px;
+		}
+
+
+		.content {
+			padding: 20px;
 		}
 
 		.counts {
@@ -87,9 +102,9 @@
 			padding-left: 0;
 			list-style: none;
 		}
-		.results-list {
+		/*.results-list {
 			margin-top: 30px;
-		}
+		}*/
 
 		.result {
 			padding: 10px;
@@ -134,46 +149,58 @@
 
 		{{#errorCount}}
 		{{#issues.errors}}
-		<h2 id="{{anchor}}">{{label}}</h2>
-		<ul class="clean-list results-list">
-			{{#list}}
-			<li class="result {{type}}">
-				<h3>{{typeLabel}}: {{message}}</h3>
-				<p>{{code}}</p>
-				<pre>{{context}} (select with "{{selector}}")</pre>
-			</li>
-			{{/list}}
-		</ul>
+		<details>
+			<summary><h2 id="{{anchor}}">{{label}}</h2></summary>
+			<div class="content">
+				<ul class="clean-list results-list">
+					{{#list}}
+					<li class="result {{type}}">
+						<h3>{{typeLabel}}: {{message}}</h3>
+						<p>{{code}}</p>
+						<pre>{{context}} (select with "{{selector}}")</pre>
+					</li>
+					{{/list}}
+				</ul>
+			</div>
+		</details>
 		{{/issues.errors}}
 		{{/errorCount}}
 
 		{{#warningCount}}
 		{{#issues.warnings}}
-		<h2 id="{{anchor}}">{{label}}</h2>
-		<ul class="clean-list results-list">
-			{{#list}}
-			<li class="result {{type}}">
-				<h3>{{typeLabel}}: {{message}}</h3>
-				<p>{{code}}</p>
-				<pre>{{context}} (select with "{{selector}}")</pre>
-			</li>
-			{{/list}}
-		</ul>
+		<details>
+			<summary><h2 id="{{anchor}}">{{label}}</h2></summary>
+			<div class="content">
+			<ul class="clean-list results-list">
+				{{#list}}
+				<li class="result {{type}}">
+					<h3>{{typeLabel}}: {{message}}</h3>
+					<p>{{code}}</p>
+					<pre>{{context}} (select with "{{selector}}")</pre>
+				</li>
+				{{/list}}
+			</ul>
+			</div>
+		</details>
 		{{/issues.warnings}}
 		{{/warningCount}}
 
 		{{#noticeCount}}
 		{{#issues.notices}}
-		<h2 id="{{anchor}}">{{label}}</h2>
-		<ul class="clean-list results-list">
-			{{#list}}
-			<li class="result {{type}}">
-				<h3>{{typeLabel}}: {{message}}</h3>
-				<p>{{code}}</p>
-				<pre>{{context}} (select with "{{selector}}")</pre>
-			</li>
-			{{/list}}
-		</ul>
+		<details>
+			<summary><h2 id="{{anchor}}">{{label}}</h2></summary>
+			<div class="content">
+			<ul class="clean-list results-list">
+				{{#list}}
+				<li class="result {{type}}">
+					<h3>{{typeLabel}}: {{message}}</h3>
+					<p>{{code}}</p>
+					<pre>{{context}} (select with "{{selector}}")</pre>
+				</li>
+				{{/list}}
+			</ul>
+			</div>
+		</details>
 		{{/issues.notices}}
 		{{/noticeCount}}
 

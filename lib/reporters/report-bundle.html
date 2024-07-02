@@ -37,9 +37,21 @@
 		h4 {
 			font-size: 16px;
 		}
+		details {
+			background: #efefef;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+		summary {
+			padding: 5px 10px;
+		}
 		summary h2,
 		summary h3 {
 			display: inline-block;
+		}
+		.content {
+			padding: 20px;
 		}
 		pre {
 			font-family: monospace;
@@ -54,7 +66,7 @@
 
 		.page {
 			position: relative;
-			max-width: 800px;
+			max-width: 1200px;
 			margin: 0 auto;
 			padding: 25px;
 		}
@@ -128,68 +140,73 @@
 
 	<div class="page">
 
-		<h1>Accessibility Report For "{{& project}}"</h1>
+		<h1 id="top">Accessibility Report For "{{& project}}"</h1>
 
 		{{#pages}}
 		<details id="top-{{idx}}">
 			<summary><h2>"{{& pageUrl}}"</h2></summary>
-			<p>Generated at: {{date}}</p>
 
-			<ul class="counts">
-				<li class="count"><a class="count-link error" href="#errors-{{idx}}">{{errorCount}} errors</a></li>
-				<li class="count"><a class="count-link warning" href="#warnings-{{idx}}">{{warningCount}} warnings</a></li>
-				<li class="count"><a class="count-link notice" href="#errors-{{idx}}">{{noticeCount}} notices</a></li>
-			</ul>
+			<div class="content">
+				<p>Generated at: {{date}}</p>
 
-			{{#errorCount}}
-			{{#issues.errors}}
-			<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
-			<ul class="clean-list results-list">
-				{{#list}}
-				<li class="result {{type}}">
-					<h4>{{typeLabel}}: {{message}}</h4>
-					<p>{{code}}</p>
-					<pre>{{context}} (select with "{{selector}}")</pre>
-				</li>
-				{{/list}}
-			</ul>
-			{{/issues.errors}}
-			{{/errorCount}}
+				<ul class="counts">
+					<li class="count"><a class="count-link error" href="#errors-{{idx}}">{{errorCount}} errors</a></li>
+					<li class="count"><a class="count-link warning" href="#warnings-{{idx}}">{{warningCount}} warnings</a></li>
+					<li class="count"><a class="count-link notice" href="#errors-{{idx}}">{{noticeCount}} notices</a></li>
+				</ul>
 
-			{{#warningCount}}
-			{{#issues.warnings}}
-			<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
-			<ul class="clean-list results-list">
-				{{#list}}
-				<li class="result {{type}}">
-					<h4>{{typeLabel}}: {{message}}</h4>
-					<p>{{code}}</p>
-					<pre>{{context}} (select with "{{selector}}")</pre>
-				</li>
-				{{/list}}
-			</ul>
-			{{/issues.warnings}}
-			{{/warningCount}}
+				{{#errorCount}}
+				{{#issues.errors}}
+				<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
+				<ul class="clean-list results-list">
+					{{#list}}
+					<li class="result {{type}}">
+						<h4>{{typeLabel}}: {{message}}</h4>
+						<p>{{code}}</p>
+						<pre>{{context}} (select with "{{selector}}")</pre>
+					</li>
+					{{/list}}
+				</ul>
+				{{/issues.errors}}
+				{{/errorCount}}
 
-			{{#noticeCount}}
-			{{#issues.notices}}
-			<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
-			<ul class="clean-list results-list">
-				{{#list}}
-				<li class="result {{type}}">
-					<h4>{{typeLabel}}: {{message}}</h4>
-					<p>{{code}}</p>
-					<pre>{{context}} (select with "{{selector}}")</pre>
-				</li>
-				{{/list}}
-			</ul>
-			{{/issues.notices}}
-			{{/noticeCount}}
+				{{#warningCount}}
+				{{#issues.warnings}}
+				<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
+				<ul class="clean-list results-list">
+					{{#list}}
+					<li class="result {{type}}">
+						<h4>{{typeLabel}}: {{message}}</h4>
+						<p>{{code}}</p>
+						<pre>{{context}} (select with "{{selector}}")</pre>
+					</li>
+					{{/list}}
+				</ul>
+				{{/issues.warnings}}
+				{{/warningCount}}
 
-			<a class="back-to-top" href="#top-{{idx}}">back to top</a>
+				{{#noticeCount}}
+				{{#issues.notices}}
+				<h3 id="{{anchor}}-{{idx}}">{{label}}</h3>
+				<ul class="clean-list results-list">
+					{{#list}}
+					<li class="result {{type}}">
+						<h4>{{typeLabel}}: {{message}}</h4>
+						<p>{{code}}</p>
+						<pre>{{context}} (select with "{{selector}}")</pre>
+					</li>
+					{{/list}}
+				</ul>
+				{{/issues.notices}}
+				{{/noticeCount}}
+			</div>
+
+			<!--<a class="back-to-top" href="#top-{{idx}}">back to top</a> -->
 
 		</details>
 		{{/pages}}
+
+		<a class="back-to-top" href="#top">back to top</a>
 	</div>
 
 </body>
