@@ -191,6 +191,9 @@ async function runExample() {
 					// for (let searchedCriterium of project.issues[issue.type + 's'].criteria) {
 					project.issues[issue.type + 's'].criteria.find((searchedCriterium) => {
 
+						console.log('searchedCriterium' + ' = ' + searchedCriterium.code);
+						console.log('criterium' + ' = ' + criterium.code);
+						console.log(searchedCriterium.code === criterium.code);
 						if (searchedCriterium.code === criterium.code) {
 
 							if (searchedCriterium.pages.length) {
@@ -201,6 +204,10 @@ async function runExample() {
 								searchedCriterium.pages.find((searchedPage) => {
 
 									// if page already exist
+									console.log('searchedPage' + ' = ' + searchedPage.pageUrl);
+									console.log('newPage' + ' = ' + newPage.pageUrl);
+									console.log(searchedPage.pageUrl === newPage.pageUrl);
+
 									if (searchedPage.pageUrl === newPage.pageUrl) {
 
 										if (searchedPage.issues.length) {
@@ -226,9 +233,9 @@ async function runExample() {
 											searchedPage.issues.push(newIssue);
 										}
 
-									// no page yet, add it to existing criterium
+									// no page match, add it to existing criterium
 									} else {
-										console.group('no existing page, add ' + newPage.documentTitle  + ' to existing criterium: ' + searchedCriterium.critLabel);
+										console.group('no matching page, add page ' + newPage.documentTitle  + ' to existing criterium: ' + searchedCriterium.label);
 										newPage.issues.push(newIssue);
 										searchedCriterium.pages.push(newPage);
 									}
@@ -240,7 +247,7 @@ async function runExample() {
 
 							// no matching criteria yet, so add it
 							} else {
-								console.group('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + searchedCriterium.critLabel);
+								console.group('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + searchedCriterium.label);
 								newPage.issues.push(newIssue);
 								searchedCriterium.pages.push(newPage);
 							}
