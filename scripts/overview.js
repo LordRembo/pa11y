@@ -280,29 +280,36 @@ async function runExample() {
 		let typeIssues = {
 			'error': {
 				"label": 'Errors',
-				"type": 'errors',
+				"type": 'error',
 				'issues': [],
 				'criteria': []
 			},
 			'warning': {
 				"label": 'Warnings',
-				"type": 'warnings',
+				"type": 'warning',
 				'issues': [],
 				'criteria': []
 			},
 			'notice': {
 				"label": 'Notices',
-				"type": 'notices',
+				"type": 'notice',
 				'issues': [],
 				'criteria': []
 			}
 		};
 
 		let totalIssues = [];
+		let pages = [];
 
 		// merge all page issues into 1 array
 		for (let page of results) {
 			totalIssues = totalIssues.concat(page.issues);
+
+			pages.push({
+				'pageUrl': page.pageUrl,
+				'documentTitle': page.documentTitle,
+				'issues': []
+			});
 		}
 
 		// loop per type: errors, warnings, notices
@@ -319,7 +326,7 @@ async function runExample() {
 				const critLabel = readableLabel(itm.code);
 				
 				// Test if the item is already in the new array
-				let result = res.find(item => item.code === itm.code)
+				let result = res.find(item => item.code === itm.code);
 				// If not lets add it
 				if(!result) {
 					const crit = {
@@ -330,17 +337,28 @@ async function runExample() {
 						'label': critLabel,
 						'typeLabel': typeLabel,
 						// 'message': issue.message,
-						'pageCount': 0,
+						'pageCount': pages.length,
 						'resultCount': 0,
-						'pages': []
+						'pages': pages
 					};
 					return res.concat(crit);
 				}
 				// If it is just return what we already have
-				return res
+				return res;
 			}, []);
 
 			console.log((typeIssues[key]).criteria.length);
+
+			// TO DO: 
+			// - per criterium page, make array of issues with the matching issues
+
+			for (let criterium of (typeIssues[key]).criteria) {
+				for (let page of criterium.pages) {
+					page.issues = (typeIssues[key]).issues.filter((issue) => issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl);
+					console.log('issues: ' + page.issues.count);
+				}
+			}
+
 		}
 
 		project.issues = typeIssues;
