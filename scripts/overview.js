@@ -215,9 +215,11 @@ async function runExample() {
 			// TO DO: 
 			// - per criterium page, make array of issues with the matching issues
 
-			for (let criterium of (typeIssues[key]).criteria) {
-				for (let page of criterium.pages) {
-					page.issues = (typeIssues[key]).issues.filter((issue) => issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl);
+			for (let criteriumKey in (typeIssues[key]).criteria) {
+				const criterium = (typeIssues[key]).criteria[criteriumKey];
+				for (let pageKey in criterium.pages) {
+					const page = criterium.pages[pageKey];
+					(typeIssues[key]).criteria[criteriumKey].pages[pageKey].issues = (typeIssues[key]).issues.filter((issue) => issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl);
 					// console.log('----');
 					// console.log(key);
 					// console.log(criterium.code);
@@ -230,8 +232,8 @@ async function runExample() {
 
 		project.issues = typeIssues;
 
-		console.log(project.issues.error.issues[0]);
-		console.log(project.issues.error.issues.length);
+		// console.log(project.issues.error.issues[0]);
+		// console.log(project.issues.error.issues.length);
 
 		const html = await htmlReporter.results(project);
 		await writeFile(path.resolve('./exports/' + projectName + '-overview.html'), html, err => {
