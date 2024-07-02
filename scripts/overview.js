@@ -192,9 +192,9 @@ async function runExample() {
 					// for (let searchedCriterium of project.issues[issue.type + 's'].criteria) {
 					project.issues[issue.type + 's'].criteria.find((searchedCriterium) => {
 
-						console.log('searchedCriterium' + ' = ' + searchedCriterium.code);
-						console.log('criterium' + ' = ' + criterium.code);
-						console.log(searchedCriterium.code === criterium.code);
+						// console.log('searchedCriterium' + ' = ' + searchedCriterium.code);
+						// console.log('criterium' + ' = ' + criterium.code);
+						// console.log(searchedCriterium.code === criterium.code);
 
 						if (searchedCriterium.code === criterium.code) {
 
@@ -206,9 +206,9 @@ async function runExample() {
 								searchedCriterium.pages.find((searchedPage) => {
 
 									// if page already exist
-									console.log('searchedPage' + ' = ' + searchedPage.pageUrl);
-									console.log('newPage' + ' = ' + newPage.pageUrl);
-									console.log(searchedPage.pageUrl === newPage.pageUrl);
+									// console.log('searchedPage' + ' = ' + searchedPage.pageUrl);
+									// console.log('newPage' + ' = ' + newPage.pageUrl);
+									// console.log(searchedPage.pageUrl === newPage.pageUrl);
 
 									if (searchedPage.pageUrl === newPage.pageUrl) {
 
@@ -222,7 +222,7 @@ async function runExample() {
 													//
 												// no matching issue found, so add new one to existing page
 												} else {
-													console.group('no matching issue found, so add new one to existing page: ' + searchedPage.documentTitle);
+													// console.log('no matching issue found, so add new one to existing page: ' + searchedPage.documentTitle);
 													searchedPage.issues.push(newIssue);
 												}
 
@@ -231,13 +231,13 @@ async function runExample() {
 											// }
 
 										} else {
-											console.group('no existing issue found, so add new one to existing page: ' + searchedPage.documentTitle);
+											// console.log('no existing issue found, so add new one to existing page: ' + searchedPage.documentTitle);
 											searchedPage.issues.push(newIssue);
 										}
 
 									// no page match, add it to existing criterium
 									} else {
-										console.group('no matching page, add page ' + newPage.documentTitle  + ' to existing criterium: ' + searchedCriterium.label);
+										// console.log('no matching page, add page ' + newPage.documentTitle  + ' to existing criterium: ' + searchedCriterium.label);
 										newPage.issues.push(newIssue);
 										searchedCriterium.pages.push(newPage);
 									}
@@ -249,13 +249,13 @@ async function runExample() {
 
 							// no matching criteria yet, so add it
 							} else {
-								console.group('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + searchedCriterium.label);
+								// console.log('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + searchedCriterium.label);
 								newPage.issues.push(newIssue);
 								searchedCriterium.pages.push(newPage);
 							}
 
 						} else {
-							console.group('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
+							// console.log('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
 							newPage.issues.push(newIssue);
 							criterium.pages.push(newPage);
 							project.issues[issue.type + 's'].criteria.push(criterium);
@@ -266,7 +266,7 @@ async function runExample() {
 					// }
 
 				} else {
-					console.group('no existing criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
+					// console.log('no existing criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
 					newPage.issues.push(newIssue);
 					criterium.pages.push(newPage);
 					project.issues[issue.type + 's'].criteria.push(criterium);
