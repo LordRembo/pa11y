@@ -115,167 +115,23 @@ async function runExample() {
 			'warningCount': 0,
 			'noticeCount': 0,
 			'issues': {
-				"errors": {
+				"error": {
 					"label": 'Errors',
-					"type": 'errors',
+					"type": 'error',
 					"criteria": []
 				},
-				"warnings": {
+				"warning": {
 					"label": 'Warnings',
-					"type": 'warnings',
+					"type": 'warning',
 					"criteria": []
 				},
-				"notices": {
+				"notice": {
 					"label": 'Notices',
-					"type": 'notices',
+					"type": 'notice',
 					"criteria": []
 				}
 			}
 		};
-
-
-		// append some stuff to all our issues and group all issues by:
-		// - type: error, warning, notice
-		// - and then by criterium
-		// - and then by url (needs its code preview and stuff)
-
-		/*
-		for (let page of results) {
-		
-			for (let issue of page.issues) {
-
-				// group issue per criterium by checking if already exists in array of issues and pushing
-
-				const typeLabel = upperCaseFirst(issue.type);
-				const critLabel = readableLabel(issue.code);
-
-				if (issue.type == 'error') {
-					project.errorCount += 1;
-				} else if (issue.type == 'warning') {
-					project.warningCount +=1 ;
-				} else if (issue.type == 'notice') {
-					project.noticeCount += 1;
-				}
-
-				let criterium = {
-					// 'pageUrl': page.pageUrl,
-					// 'documentTitle': page.documentTitle,
-					'code': issue.code,
-					'type': issue.type,
-					'label': critLabel,
-					'typeLabel': typeLabel,
-					// 'message': issue.message,
-					'pageCount': 0,
-					'resultCount': 0,
-					'pages': []
-				};
-
-				let newPage = {
-					'pageUrl': page.pageUrl,
-					'documentTitle': page.documentTitle,
-					'message': issue.message,
-					'context': issue.context,
-					'selector': issue.selector,
-					'issues': []
-				};
-
-				let newIssue = {
-					// 'pageUrl': page.pageUrl,
-					// 'documentTitle': page.documentTitle,
-					'code': issue.code,
-					'message': issue.message,
-					'context': issue.context,
-					'selector': issue.selector,
-				};
-
-				if (project.issues[issue.type + 's'].criteria.length) {
-
-					// for (let searchedCriterium of project.issues[issue.type + 's'].criteria) {
-					project.issues[issue.type + 's'].criteria.find((searchedCriterium) => {
-
-						// console.log('searchedCriterium' + ' = ' + searchedCriterium.code);
-						// console.log('criterium' + ' = ' + criterium.code);
-						// console.log(searchedCriterium.code === criterium.code);
-
-						if (searchedCriterium.code === criterium.code) {
-
-							if (searchedCriterium.pages.length) {
-
-								// criterium already exists
-								// now see if the page exists by checking for the url
-								// for (let searchedPage of searchedCriterium.pages) {
-								searchedCriterium.pages.find((searchedPage) => {
-
-									// if page already exist
-									// console.log('searchedPage' + ' = ' + searchedPage.pageUrl);
-									// console.log('newPage' + ' = ' + newPage.pageUrl);
-									// console.log(searchedPage.pageUrl === newPage.pageUrl);
-
-									if (searchedPage.pageUrl === newPage.pageUrl) {
-
-										if (searchedPage.issues.length) {
-
-											// we need to check for the issues themselves to have same context & selector or not
-											// for (let searchedIssue of searchedPage.issues) {
-											searchedPage.issues.find((searchedIssue) => {
-												// if exists, don't need to do anything
-												if (searchedIssue.code === newIssue.code && searchedIssue.message === newIssue.message && searchedIssue.context === newIssue.context && searchedIssue.selector === newIssue.selector) {
-													//
-												// no matching issue found, so add new one to existing page
-												} else {
-													// console.log('no matching issue found, so add new one to existing page: ' + searchedPage.documentTitle);
-													searchedPage.issues.push(newIssue);
-												}
-
-												return searchedIssue;
-											});
-											// }
-
-										} else {
-											// console.log('no existing issue found, so add new one to existing page: ' + searchedPage.documentTitle);
-											searchedPage.issues.push(newIssue);
-										}
-
-									// no page match, add it to existing criterium
-									} else {
-										// console.log('no matching page, add page ' + newPage.documentTitle  + ' to existing criterium: ' + searchedCriterium.label);
-										newPage.issues.push(newIssue);
-										searchedCriterium.pages.push(newPage);
-									}
-
-									return searchedPage;
-
-								});
-								// }
-
-							// no matching criteria yet, so add it
-							} else {
-								// console.log('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + searchedCriterium.label);
-								newPage.issues.push(newIssue);
-								searchedCriterium.pages.push(newPage);
-							}
-
-						} else {
-							// console.log('no matching criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
-							newPage.issues.push(newIssue);
-							criterium.pages.push(newPage);
-							project.issues[issue.type + 's'].criteria.push(criterium);
-						}
-
-						return searchedCriterium;
-					});
-					// }
-
-				} else {
-					// console.log('no existing criteria, add issue to new page: ' + newPage.documentTitle + ' to existing criterium: ' + criterium.label);
-					newPage.issues.push(newIssue);
-					criterium.pages.push(newPage);
-					project.issues[issue.type + 's'].criteria.push(criterium);
-				}
-
-			}
-		}
-		*/
 		
 		let typeIssues = {
 			'error': {
@@ -303,7 +159,13 @@ async function runExample() {
 
 		// merge all page issues into 1 array
 		for (let page of results) {
-			totalIssues = totalIssues.concat(page.issues);
+
+			const newArray = page.issues.map((item, index) => {
+				item.pageUrl = page.pageUrl;
+				return item;
+			});
+
+			totalIssues = totalIssues.concat(newArray);
 
 			pages.push({
 				'pageUrl': page.pageUrl,
@@ -314,6 +176,7 @@ async function runExample() {
 
 		// loop per type: errors, warnings, notices
 		for (let key in typeIssues) {
+
 			(typeIssues[key]).issues = totalIssues.filter( (issue) => (issue.type === key) );
 			project[key + 'Count'] = typeIssues[key].issues.length;
 			console.log(key + ' count = ' + project[key + 'Count']);
@@ -355,13 +218,20 @@ async function runExample() {
 			for (let criterium of (typeIssues[key]).criteria) {
 				for (let page of criterium.pages) {
 					page.issues = (typeIssues[key]).issues.filter((issue) => issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl);
-					console.log('issues: ' + page.issues.count);
+					// console.log('----');
+					// console.log(key);
+					// console.log(criterium.code);
+					// console.log(page.pageUrl);
+					// console.log('----');
 				}
 			}
 
 		}
 
 		project.issues = typeIssues;
+
+		console.log(project.issues.error.issues[0]);
+		console.log(project.issues.error.issues.length);
 
 		const html = await htmlReporter.results(project);
 		await writeFile(path.resolve('./exports/' + projectName + '-overview.html'), html, err => {
