@@ -70,7 +70,6 @@
     "test-integration": "mocha --config test/integration/.mocharc.json",
     "test-unit": "mocha",
     "verify-coverage": "c8 check-coverage --lines 90 --functions 90 --branches 90",
-    "start": "pa11y https://dropsolid.com/en > ../../Downloads/pa11y-report-dropsolid.html --reporter html --runner axe --runner htmlcs",
     "check": "node scripts/check.js",
     "bundle": "node scripts/bundle.js"
   },
