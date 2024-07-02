@@ -71,7 +71,8 @@
     "test-unit": "mocha",
     "verify-coverage": "c8 check-coverage --lines 90 --functions 90 --branches 90",
     "check": "node scripts/check.js",
-    "bundle": "node scripts/bundle.js"
+    "bundle": "node scripts/bundle.js",
+    "overview": "node scripts/overview.js"
   },
   "files": [
     "bin",

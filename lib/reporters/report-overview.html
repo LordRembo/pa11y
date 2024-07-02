@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+	<title>Accessibility Report For "{{& project}}" ({{date}})</title>
+
+	<style>
+
+		html, body {
+			margin: 0;
+			padding: 0;
+			background-color: #fff;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 16px;
+			line-height: 22px;
+			color: #333;
+		}
+		li {
+			margin-bottom: 15px;
+		}
+		h2, h3, h4, p, pre, ul {
+			margin-top: 0;
+			margin-bottom: 20px;
+		}
+		p:last-child, pre:last-child, ul:last-child {
+			margin-bottom: 0;
+		}
+		h2 {
+			margin-bottom: 10px;
+			font-size: 24px;
+			line-height: 24px;
+		}
+		h3 {
+			font-size: 21px;
+		}
+		h4 {
+			font-size: 16px;
+		}
+		details {
+			background: #efefef;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+		summary {
+			padding: 5px 10px;
+		}
+		summary h2,
+		summary h3 {
+			display: inline-block;
+		}
+		.content {
+			padding: 20px;
+		}
+		pre {
+			font-family: monospace;
+			white-space: pre-wrap;
+			overflow: auto;
+			padding: 10px;
+			color: #efefef;
+			background: #2f2f2f;
+			border-radius: 5px;
+			border: 1px solid #000;
+		}
+
+		.page {
+			position: relative;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 25px;
+		}
+
+		.counts {
+			list-style: none;
+			display: flex;
+			flex-wrap: wrap;
+			padding: 0;
+			margin: 30px 0;
+			font-size: 20px;
+		}
+		.count {
+			list-style: none;
+			display: inline-block;
+		}
+		.count-link {
+			display: inline-block;
+			padding: 5px;
+			margin: 0 10px;
+			border-radius: 5px;
+			border: 1px solid #eee;
+		}
+
+		.count-link,
+		.count-link:visited {
+			text-decoration: none;
+		}
+
+		.clean-list {
+			margin-left: 0;
+			padding-left: 0;
+			list-style: none;
+		}
+		.results-list {
+			margin-top: 30px;
+		}
+
+		.result {
+			padding: 10px;
+			border-radius: 5px;
+			border: 1px solid #eee;
+		}
+		.error {
+			background-color: #fdd;
+			border-color: #ff9696;
+		}
+		.warning {
+			background-color: #ffd;
+			border-color: #e7c12b;
+		}
+		.notice {
+			background-color: #eef4ff;
+			border-color: #b6d0ff;
+		}
+
+		.back-to-top {
+			position: sticky;
+			display: block;
+			bottom: 0;
+			margin-left: 101%;
+			padding: 10px;
+			white-space: nowrap;
+			background: white;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<div class="page">
+
+		<h1 id="top">Accessibility Report For "{{& name}}"</h1>
+		<p>Generated at: {{date}}</p>
+
+		<ul class="counts">
+			<li class="count"><a class="count-link error" href="#errors">{{errorCount}} errors</a></li>
+			<!--<li class="count"><a class="count-link warning" href="#warnings">{{warningCount}} warnings</a></li>
+			<li class="count"><a class="count-link notice" href="#errors">{{noticeCount}} notices</a></li>-->
+		</ul>
+
+		<details>
+			<summary><h2 id="{{issues.errors.type}}">{{issues.errors.label}}</h2></summary>
+			<div class="content">
+				
+				{{#issues.errors.criteria}}
+					<h3>{{label}}</h3>
+					<ul class="clean-list results-list">
+						<li>
+				
+							{{#pages}}
+							<ul class="clean-list results-list">
+								<li><strong>Page:</strong> <a href="{{pageUrl}}" target="_blank" title="visit page {{documentTitle}}">{{documentTitle}}</a></li>
+								{{#issues}}
+								<li class="result {{type}}">
+										<h4>{{typeLabel}}: {{message}}</h4>
+										<pre>{{context}} (select with "{{selector}}")</pre>
+								</li>
+								{{/issues}}
+							</ul>
+							{{/pages}}
+
+						</li>
+					</ul>
+				{{/issues.errors.criteria}}
+			</div>
+		</details>
+
+		<a class="back-to-top" href="#top">back to top</a>
+
+	</div>
+
+</body>
+</html>
