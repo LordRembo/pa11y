@@ -162,16 +162,19 @@ async function runExample() {
 
 			const newArray = page.issues.map((item, index) => {
 				item.pageUrl = page.pageUrl;
+				item.documentTitle = page.documentTitle;
 				return item;
 			});
 
 			totalIssues = totalIssues.concat(newArray);
-
+			
+			/*
 			pages.push({
 				'pageUrl': page.pageUrl,
 				'documentTitle': page.documentTitle,
 				'issues': []
 			});
+			*/
 		}
 
 		// loop per type: errors, warnings, notices
@@ -217,15 +220,35 @@ async function runExample() {
 
 			for (let criteriumKey in (typeIssues[key]).criteria) {
 				const criterium = (typeIssues[key]).criteria[criteriumKey];
+
+				// add pages
+				(typeIssues[key]).criteria[criteriumKey].pages = (typeIssues[key]).issues.reduce((res, itm) => {
+					
+					// Test if the item is already in the new array
+					let result = res.find(item => item.pageUrl === itm.pageUrl);
+					// If not lets add it
+					if(!result) {
+						const pg = {
+							'pageUrl': itm.pageUrl,
+							'documentTitle': itm.documentTitle
+						};
+						return res.concat(pg);
+					}
+					// If it is just return what we already have
+					return res;
+				}, []);
+
 				for (let pageKey in criterium.pages) {
 					const page = criterium.pages[pageKey];
-					(typeIssues[key]).criteria[criteriumKey].pages[pageKey].issues = (typeIssues[key]).issues.filter((issue) => issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl);
-					// console.log('----');
-					// console.log(key);
-					// console.log(criterium.code);
-					// console.log(page.pageUrl);
-					// console.log('----');
+					
+					let pageIssues = [];
+
+					pageIssues = (typeIssues[key]).issues.filter((issue) => (issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl));
+
+					(typeIssues[key]).criteria[criteriumKey].pages[pageKey].issues = pageIssues;
+
 				}
+				
 			}
 
 		}
