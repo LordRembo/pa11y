@@ -32,8 +32,8 @@ if (projectIndex > -1) {
 
 const projectName = (projectValue || 'undefined');
 
-// console.log(urlsValue);
-// console.log(projectName);
+console.log('urls: ' + urlsValue);
+console.log('project: ' + projectName);
 
 runExample();
 
@@ -76,10 +76,28 @@ async function runExample() {
 		// 	'https://dropsolid.com/en/about-us/'
 		// ];
 
+		// check if is a file to import or not
+		// if not, assume it's a url
+
+		let isImport = true;
+		let urlsArr = [];
+
+		if (!fs.existsSync(path.resolve(urlsValue))) {
+			console.log('No file with urls found.');
+			console.log('Assuming urls were past instead');
+			isImport = false;
+			// let 
+
+			urlsArr = urlsValue.split(',');
+		}
+
 		// read urls from a list
-		// const urlsList = await readFile(path.resolve(urlsValue), 'utf-8');
-		const urlsList = await (await readFile(path.resolve(urlsValue), 'utf-8'));
-		let urlsArr = urlsList.replace(/\r\n/g,'\n').split('\n');
+		if (isImport) {
+			const urlsList = await (await readFile(path.resolve(urlsValue), 'utf-8'));
+			urlsArr = urlsList.replace(/\r\n/g,'\n').split('\n');
+		}
+
+		let singlePage = (urlsArr.length) ? false : true;
 
 		let resultsArr = [];
 
@@ -111,6 +129,7 @@ async function runExample() {
 		let project = {
 			'name': projectName,
 			'date': new Date(),
+			'singlePage': singlePage,
 			'errorCount' : 0,
 			'warningCount': 0,
 			'noticeCount': 0,
@@ -163,6 +182,12 @@ async function runExample() {
 			const newArray = page.issues.map((item, index) => {
 				item.pageUrl = page.pageUrl;
 				item.documentTitle = page.documentTitle;
+
+				if (singlePage) {
+					project.pageUrl = page.pageUrl;
+					project.documentTitle = page.documentTitle;
+				}
+				
 				return item;
 			});
 

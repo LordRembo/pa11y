@@ -141,7 +141,13 @@
 	<div class="page">
 
 		<h1 id="top">Accessibility Report For "{{& name}}"</h1>
-		<p>Generated at: {{date}}</p>
+		{{^singlePage}}<p><strong>Generated at:</strong> {{date}}</p>{{/singlePage}}
+		{{#singlePage}}
+		<ul>
+			<li><strong>Generated at:</strong> {{date}}</li>
+			<li><strong>Page:</strong> {{pageUrl}}"</li>
+		</ul>
+		{{/singlePage}}
 
 		<ul class="counts">
 			<li class="count"><a class="count-link error" href="#errors">{{errorCount}} errors</a></li>

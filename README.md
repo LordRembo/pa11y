@@ -5,12 +5,14 @@
 - replace html_codesniffer by BOSA's fork
 - add some new scripts to generate html reports:
   - `npm run-script check -- --urls imports/urls.txt --project my_project`
-    - feed a list of urls & get an html report per url
+    - feed a list of urls (file) & get an html report per url
     - `--urls` is the relative path to a file with an url on each new line
     - `-- project` a name to give to the folder that will contain the reports
     - exported files live in the `exports` folder
   - `npm run-script bundle -- --urls imports/urls.txt --project my_project`
-    - feed a list of urls & get 1 html report containing all the pages 
+    - feed a list of urls (file) & get 1 html report containing all the pages 
+  - `npm run-script overview -- --urls imports/urls.txt --project my_project`
+    - feed 1 or more urls, either as file path or comma-separated string, and get an overview of errors ordered by criterium
 
 ---
 
