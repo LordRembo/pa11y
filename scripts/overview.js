@@ -43,9 +43,41 @@ function upperCaseFirst(string) {
 }
 
 function readableLabel(string) {
-	const spacedString = string.split('.').join(' ');
-	const dottedString = spacedString.split('_').join('.');
-	return dottedString;
+	//console.log(string);
+	let newString = '';
+
+	// cut the start of the string
+	const regex01String = 'WCAG2AA\.Principle[0-9]\.Guideline';
+	const regex01Line = new RegExp(regex01String, 'g');
+	newString = string.replace(regex01Line, '');
+
+	// cut the first numbers at the start, these are the chapter number
+	const regex02String = '^(([0-9](_[0-9])).)';
+	const regex02Line = new RegExp(regex02String, 'g');
+	newString = newString.replace(regex02Line, '');
+
+	
+	// get the crit number + the techniques
+	// const regex03String = '([0-9](_[0-9])+).';
+	// const regex03Line = new RegExp(regex02String, 'g');
+	// const newArray = newString.match(regex02Line);
+	const newArray = newString.split('.');
+	const critNumber = newArray[0].split('_').join('.');
+	const techniques = newArray[1];
+
+	// console.log('newString = ' + newString);
+	// console.log('critNumber = ' + critNumber);
+	// console.log('techniques = ' + techniques);
+
+	// newString = newString.split('.').join(' ');
+	// newString = newString.split('_').join('.');
+
+	const criterion = 'Success Criterion ' + critNumber;
+
+	return {
+		criterion: criterion,
+		techiques: techniques
+	};
 }
 
 // Async function required for us to use await
@@ -210,11 +242,15 @@ async function runExample() {
 			console.log(key + ' count = ' + project[key + 'Count']);
 						
 			// add issues as criteria, to typeIssue criteria array,
-			// if it's code does not match the code of an already added criterium
+			// if it's code does not match the code of an already added criterion
+			let index = 0;
 			(typeIssues[key]).criteria = (typeIssues[key]).issues.reduce((res, itm) => {
 				
 				const typeLabel = upperCaseFirst(itm.type);
-				const critLabel = readableLabel(itm.code);
+				const critLabel = readableLabel(itm.code).criterion;
+				const critTechniques = readableLabel(itm.code).techiques;
+
+				++index;
 				
 				// Test if the item is already in the new array
 				let result = res.find(item => item.code === itm.code);
@@ -223,13 +259,15 @@ async function runExample() {
 					const crit = {
 						// 'pageUrl': page.pageUrl,
 						// 'documentTitle': page.documentTitle,
+						'idx': key + '_' + index,
 						'code': itm.code,
 						'type': itm.type,
 						'label': critLabel,
+						'techniques': critTechniques,
 						'typeLabel': typeLabel,
 						// 'message': issue.message,
-						'pageCount': pages.length,
-						'resultCount': 0,
+						'pageCount': 0,
+						'issueCount': 0,
 						'pages': pages
 					};
 					return res.concat(crit);
@@ -241,13 +279,13 @@ async function runExample() {
 			console.log((typeIssues[key]).criteria.length);
 
 			// TO DO: 
-			// - per criterium page, make array of issues with the matching issues
+			// - per criterion page, make array of issues with the matching issues
 
-			for (let criteriumKey in (typeIssues[key]).criteria) {
-				const criterium = (typeIssues[key]).criteria[criteriumKey];
+			for (let criterionKey in (typeIssues[key]).criteria) {
+				const criterion = (typeIssues[key]).criteria[criterionKey];
 
 				// add pages
-				(typeIssues[key]).criteria[criteriumKey].pages = (typeIssues[key]).issues.reduce((res, itm) => {
+				(typeIssues[key]).criteria[criterionKey].pages = (typeIssues[key]).issues.reduce((res, itm) => {
 					
 					// Test if the item is already in the new array
 					let result = res.find(item => item.pageUrl === itm.pageUrl);
@@ -263,14 +301,22 @@ async function runExample() {
 					return res;
 				}, []);
 
-				for (let pageKey in criterium.pages) {
-					const page = criterium.pages[pageKey];
+				(typeIssues[key]).criteria[criterionKey].pageCount = ((typeIssues[key]).criteria[criterionKey].pages).length;
+
+				(typeIssues[key]).criteria[criterionKey].issueCount = 0;
+
+				for (let pageKey in criterion.pages) {
+					const page = criterion.pages[pageKey];
 					
 					let pageIssues = [];
 
-					pageIssues = (typeIssues[key]).issues.filter((issue) => (issue.type === key && issue.code === criterium.code && issue.pageUrl === page.pageUrl));
+					pageIssues = (typeIssues[key]).issues.filter((issue) => (issue.type === key && issue.code === criterion.code && issue.pageUrl === page.pageUrl));
 
-					(typeIssues[key]).criteria[criteriumKey].pages[pageKey].issues = pageIssues;
+					(typeIssues[key]).criteria[criterionKey].pages[pageKey].issues = pageIssues;
+					(typeIssues[key]).criteria[criterionKey].pages[pageKey].pageIssueCount = pageIssues.length;
+					(typeIssues[key]).criteria[criterionKey].pages[pageKey].pageNumber = pageKey;
+
+					(typeIssues[key]).criteria[criterionKey].issueCount += pageIssues.length;
 
 				}
 				
