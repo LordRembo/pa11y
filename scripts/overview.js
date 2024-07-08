@@ -165,45 +165,45 @@ async function runExample() {
 			'errorCount' : 0,
 			'warningCount': 0,
 			'noticeCount': 0,
-			'issues': {
-				"error": {
+			'issues': [
+				{
 					"label": 'Errors',
 					"type": 'error',
 					"criteria": []
 				},
-				"warning": {
+				{
 					"label": 'Warnings',
 					"type": 'warning',
 					"criteria": []
 				},
-				"notice": {
+				{
 					"label": 'Notices',
 					"type": 'notice',
 					"criteria": []
 				}
-			}
+			]
 		};
 		
-		let typeIssues = {
-			'error': {
+		let typeIssues = [
+			{
 				"label": 'Errors',
 				"type": 'error',
 				'issues': [],
 				'criteria': []
 			},
-			'warning': {
+			{
 				"label": 'Warnings',
 				"type": 'warning',
 				'issues': [],
 				'criteria': []
 			},
-			'notice': {
+			{
 				"label": 'Notices',
 				"type": 'notice',
 				'issues': [],
 				'criteria': []
 			}
-		};
+		];
 
 		let totalIssues = [];
 		let pages = [];
@@ -235,22 +235,28 @@ async function runExample() {
 		}
 
 		// loop per type: errors, warnings, notices
-		for (let key in typeIssues) {
+		for (let index in typeIssues) {
 
-			(typeIssues[key]).issues = totalIssues.filter( (issue) => (issue.type === key) );
-			project[key + 'Count'] = typeIssues[key].issues.length;
+			let key = typeIssues[index].type;
+			let count = 0;
+
+			(typeIssues[index]).issues = totalIssues.filter( (issue) => (issue.type === key) );
+			count = typeIssues[index].issues.length;
+			(typeIssues[index]).issueCount = count;
+
+			// project[key + 'Count'] = typeIssues[index].issues.length;
 			console.log(key + ' count = ' + project[key + 'Count']);
 						
 			// add issues as criteria, to typeIssue criteria array,
 			// if it's code does not match the code of an already added criterion
-			let index = 0;
-			(typeIssues[key]).criteria = (typeIssues[key]).issues.reduce((res, itm) => {
+			let index2 = 0;
+			(typeIssues[index]).criteria = (typeIssues[index]).issues.reduce((res, itm) => {
 				
 				const typeLabel = upperCaseFirst(itm.type);
 				const critLabel = readableLabel(itm.code).criterion;
 				const critTechniques = readableLabel(itm.code).techiques;
 
-				++index;
+				++index2;
 				
 				// Test if the item is already in the new array
 				let result = res.find(item => item.code === itm.code);
@@ -259,7 +265,7 @@ async function runExample() {
 					const crit = {
 						// 'pageUrl': page.pageUrl,
 						// 'documentTitle': page.documentTitle,
-						'idx': key + '_' + index,
+						'idx': key + '_' + index2,
 						'code': itm.code,
 						'type': itm.type,
 						'label': critLabel,
@@ -276,16 +282,16 @@ async function runExample() {
 				return res;
 			}, []);
 
-			console.log((typeIssues[key]).criteria.length);
+			console.log((typeIssues[index]).criteria.length);
 
 			// TO DO: 
 			// - per criterion page, make array of issues with the matching issues
 
-			for (let criterionKey in (typeIssues[key]).criteria) {
-				const criterion = (typeIssues[key]).criteria[criterionKey];
+			for (let criterionKey in (typeIssues[index]).criteria) {
+				const criterion = (typeIssues[index]).criteria[criterionKey];
 
 				// add pages
-				(typeIssues[key]).criteria[criterionKey].pages = (typeIssues[key]).issues.reduce((res, itm) => {
+				(typeIssues[index]).criteria[criterionKey].pages = (typeIssues[index]).issues.reduce((res, itm) => {
 					
 					// Test if the item is already in the new array
 					let result = res.find(item => item.pageUrl === itm.pageUrl);
@@ -301,22 +307,22 @@ async function runExample() {
 					return res;
 				}, []);
 
-				(typeIssues[key]).criteria[criterionKey].pageCount = ((typeIssues[key]).criteria[criterionKey].pages).length;
+				(typeIssues[index]).criteria[criterionKey].pageCount = ((typeIssues[index]).criteria[criterionKey].pages).length;
 
-				(typeIssues[key]).criteria[criterionKey].issueCount = 0;
+				(typeIssues[index]).criteria[criterionKey].issueCount = 0;
 
 				for (let pageKey in criterion.pages) {
 					const page = criterion.pages[pageKey];
 					
 					let pageIssues = [];
 
-					pageIssues = (typeIssues[key]).issues.filter((issue) => (issue.type === key && issue.code === criterion.code && issue.pageUrl === page.pageUrl));
+					pageIssues = (typeIssues[index]).issues.filter((issue) => (issue.type === key && issue.code === criterion.code && issue.pageUrl === page.pageUrl));
 
-					(typeIssues[key]).criteria[criterionKey].pages[pageKey].issues = pageIssues;
-					(typeIssues[key]).criteria[criterionKey].pages[pageKey].pageIssueCount = pageIssues.length;
-					(typeIssues[key]).criteria[criterionKey].pages[pageKey].pageNumber = pageKey;
+					(typeIssues[index]).criteria[criterionKey].pages[pageKey].issues = pageIssues;
+					(typeIssues[index]).criteria[criterionKey].pages[pageKey].pageIssueCount = pageIssues.length;
+					(typeIssues[index]).criteria[criterionKey].pages[pageKey].pageNumber = pageKey;
 
-					(typeIssues[key]).criteria[criterionKey].issueCount += pageIssues.length;
+					(typeIssues[index]).criteria[criterionKey].issueCount += pageIssues.length;
 
 				}
 				
